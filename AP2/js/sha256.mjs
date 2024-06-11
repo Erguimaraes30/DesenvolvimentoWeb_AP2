@@ -19,20 +19,20 @@ var b64pad  = ""; /* base-64 pad character. "=" for strict RFC compliance   */
  * These are the functions you'll usually want to call
  * They take string arguments and return either hex or base-64 encoded strings
  */
-function hex_sha256(s)    { return rstr2hex(rstr_sha256(str2rstr_utf8(s))); }
-function b64_sha256(s)    { return rstr2b64(rstr_sha256(str2rstr_utf8(s))); }
-function any_sha256(s, e) { return rstr2any(rstr_sha256(str2rstr_utf8(s)), e); }
-function hex_hmac_sha256(k, d)
+export function hex_sha256(s)    { return rstr2hex(rstr_sha256(str2rstr_utf8(s))); }
+export function b64_sha256(s)    { return rstr2b64(rstr_sha256(str2rstr_utf8(s))); }
+export function any_sha256(s, e) { return rstr2any(rstr_sha256(str2rstr_utf8(s)), e); }
+export function hex_hmac_sha256(k, d)
   { return rstr2hex(rstr_hmac_sha256(str2rstr_utf8(k), str2rstr_utf8(d))); }
-function b64_hmac_sha256(k, d)
+export function b64_hmac_sha256(k, d)
   { return rstr2b64(rstr_hmac_sha256(str2rstr_utf8(k), str2rstr_utf8(d))); }
-function any_hmac_sha256(k, d, e)
+export function any_hmac_sha256(k, d, e)
   { return rstr2any(rstr_hmac_sha256(str2rstr_utf8(k), str2rstr_utf8(d)), e); }
 
 /*
  * Perform a simple self-test to see if the VM is working
  */
-function sha256_vm_test()
+export function sha256_vm_test()
 {
   return hex_sha256("abc").toLowerCase() ==
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
@@ -149,73 +149,6 @@ function rstr2any(input, encoding)
   for(i = remainders.length - 1; i >= 0; i--)
     output += encoding.charAt(remainders[i]);
 
-  /* Append leading zero equivalents */
-  var full_length = Math.ceil(input.length * 8 /
-                                    (Math.log(encoding.length) / Math.log(2)))
-  for(i = output.length; i < full_length; i++)
-    output = encoding[0] + output;
-
-  return output;
-}
-
-/*
- * Encode a string as utf-8.
- * For efficiency, this assumes the input is valid utf-16.
- */
-function str2rstr_utf8(input)
-{
-  var output = "";
-  var i = -1;
-  var x, y;
-
-  while(++i < input.length)
-  {
-    /* Decode utf-16 surrogate pairs */
-    x = input.charCodeAt(i);
-    y = i + 1 < input.length ? input.charCodeAt(i + 1) : 0;
-    if(0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF)
-    {
-      x = 0x10000 + ((x & 0x03FF) << 10) + (y & 0x03FF);
-      i++;
-    }
-
-    /* Encode output as utf-8 */
-    if(x <= 0x7F)
-      output += String.fromCharCode(x);
-    else if(x <= 0x7FF)
-      output += String.fromCharCode(0xC0 | ((x >>> 6 ) & 0x1F),
-                                    0x80 | ( x         & 0x3F));
-    else if(x <= 0xFFFF)
-      output += String.fromCharCode(0xE0 | ((x >>> 12) & 0x0F),
-                                    0x80 | ((x >>> 6 ) & 0x3F),
-                                    0x80 | ( x         & 0x3F));
-    else if(x <= 0x1FFFFF)
-      output += String.fromCharCode(0xF0 | ((x >>> 18) & 0x07),
-                                    0x80 | ((x >>> 12) & 0x3F),
-                                    0x80 | ((x >>> 6 ) & 0x3F),
-                                    0x80 | ( x         & 0x3F));
-  }
-  return output;
-}
-
-/*
- * Encode a string as utf-16
- */
-function str2rstr_utf16le(input)
-{
-  var output = "";
-  for(var i = 0; i < input.length; i++)
-    output += String.fromCharCode( input.charCodeAt(i)        & 0xFF,
-                                  (input.charCodeAt(i) >>> 8) & 0xFF);
-  return output;
-}
-
-function str2rstr_utf16be(input)
-{
-  var output = "";
-  for(var i = 0; i < input.length; i++)
-    output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0xFF,
-                                   input.charCodeAt(i)        & 0xFF);
   return output;
 }
 
@@ -247,47 +180,26 @@ function binb2rstr(input)
 /*
  * Main sha256 function, with its support functions
  */
-function sha256_S (X, n) {return ( X >>> n ) | (X << (32 - n));}
-function sha256_R (X, n) {return ( X >>> n );}
-function sha256_Ch(x, y, z) {return ((x & y) ^ ((~x) & z));}
-function sha256_Maj(x, y, z) {return ((x & y) ^ (x & z) ^ (y & z));}
-function sha256_Sigma0256(x) {return (sha256_S(x, 2) ^ sha256_S(x, 13) ^ sha256_S(x, 22));}
-function sha256_Sigma1256(x) {return (sha256_S(x, 6) ^ sha256_S(x, 11) ^ sha256_S(x, 25));}
-function sha256_Gamma0256(x) {return (sha256_S(x, 7) ^ sha256_S(x, 18) ^ sha256_R(x, 3));}
-function sha256_Gamma1256(x) {return (sha256_S(x, 17) ^ sha256_S(x, 19) ^ sha256_R(x, 10));}
-function sha256_Sigma0512(x) {return (sha256_S(x, 28) ^ sha256_S(x, 34) ^ sha256_S(x, 39));}
-function sha256_Sigma1512(x) {return (sha256_S(x, 14) ^ sha256_S(x, 18) ^ sha256_S(x, 41));}
-function sha256_Gamma0512(x) {return (sha256_S(x, 1)  ^ sha256_S(x, 8) ^ sha256_R(x, 7));}
-function sha256_Gamma1512(x) {return (sha256_S(x, 19) ^ sha256_S(x, 61) ^ sha256_R(x, 6));}
-
-var sha256_K = new Array
-(
-  1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993,
-  -1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987,
-  1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522,
-  264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986,
-  -1740746414, -1473132947, -1341970488, -1084653625, -958395405, -710438585,
-  113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291,
-  1695183700, 1986661051, -2117940946, -1838011259, -1564481375, -1474664885,
-  -1035236496, -949202525, -778901479, -694614492, -200395387, 275423344,
-  430227734, 506948616, 659060556, 883997877, 958139571, 1322822218,
-  1537002063, 1747873779, 1955562222, 2024104815, -2067236844, -1933114872,
-  -1866530822, -1538233109, -1090935817, -965641998
-);
-
 function binb_sha256(m, l)
 {
-  var HASH = new Array(1779033703, -1150833019, 1013904242, -1521486534,
-                       1359893119, -1694144372, 528734635, 1541459225);
+  var K = new Array(0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2);
+  var HASH = new Array(0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19);
   var W = new Array(64);
   var a, b, c, d, e, f, g, h;
-  var i, j, T1, T2;
+  var T1, T2;
 
   /* append padding */
   m[l >> 5] |= 0x80 << (24 - l % 32);
   m[((l + 64 >> 9) << 4) + 15] = l;
 
-  for(i = 0; i < m.length; i += 16)
+  for(var i = 0; i < m.length; i += 16)
   {
     a = HASH[0];
     b = HASH[1];
@@ -298,15 +210,15 @@ function binb_sha256(m, l)
     g = HASH[6];
     h = HASH[7];
 
-    for(j = 0; j < 64; j++)
+    for(var j = 0; j < 64; j++)
     {
       if (j < 16) W[j] = m[j + i];
-      else W[j] = safe_add(safe_add(safe_add(sha256_Gamma1256(W[j - 2]), W[j - 7]),
-                                            sha256_Gamma0256(W[j - 15])), W[j - 16]);
+      else W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]),
+                                            Gamma0256(W[j - 15])), W[j - 16]);
 
-      T1 = safe_add(safe_add(safe_add(safe_add(h, sha256_Sigma1256(e)), sha256_Ch(e, f, g)),
-                                                          sha256_K[j]), W[j]);
-      T2 = safe_add(sha256_Sigma0256(a), sha256_Maj(a, b, c));
+      T1 = safe_add(safe_add(safe_add(safe_add(h, Sigma1256(e)),
+                                              Ch(e, f, g)), K[j]), W[j]);
+      T2 = safe_add(Sigma0256(a), Maj(a, b, c));
       h = g;
       g = f;
       f = e;
@@ -329,7 +241,19 @@ function binb_sha256(m, l)
   return HASH;
 }
 
-function safe_add (x, y)
+/*
+ * Perform the appropriate triplet combination function for the current
+ * iteration
+ */
+function Ch(x, y, z) { return (x & y) ^ ((~x) & z); }
+function Maj(x, y, z) { return (x & y) ^ (x & z) ^ (y & z); }
+function Sigma0256(x) { return S(x, 2) ^ S(x, 13) ^ S(x, 22); }
+function Sigma1256(x) { return S(x, 6) ^ S(x, 11) ^ S(x, 25); }
+function Gamma0256(x) { return S(x, 7) ^ S(x, 18) ^ R(x, 3); }
+function Gamma1256(x) { return S(x, 17) ^ S(x, 19) ^ R(x, 10); }
+function S(x, n) { return (x >>> n) | (x << (32 - n)); }
+function R(x, n) { return (x >>> n); }
+function safe_add(x, y)
 {
   var lsw = (x & 0xFFFF) + (y & 0xFFFF);
   var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
