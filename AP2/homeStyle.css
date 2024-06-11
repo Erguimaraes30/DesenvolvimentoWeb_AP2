@@ -40,7 +40,9 @@ nav {
     gap: 10px;
 }
 
-.menu-btn {
+.menu-btn,
+.search-btn,
+.logout-btn {
     background-color: #fff;
     color: #000;
     border: 2px solid rgb(0, 0, 0);
@@ -50,7 +52,9 @@ nav {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.menu-btn:hover {
+.menu-btn:hover,
+.search-btn:hover,
+.logout-btn:hover {
     background-color: gold;
     color: #fff;
 }
@@ -60,6 +64,22 @@ nav {
     text-decoration: none;
 }
 
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    border: 2px solid rgb(0, 0, 0);
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.logout-btn {
+    margin-right: 10px; 
+}
+
 .image-container {
     display: flex;
     justify-content: center;
@@ -67,8 +87,3 @@ nav {
     margin-top: 20px;
 }
 
-.gallery-image {
-    max-width: 45%;
-    height: auto;
-    margin: 0 10px;
-}

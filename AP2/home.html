@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Inline+One:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
   <header>
@@ -16,15 +17,19 @@
       <img src="images/escudo.png" alt="Escudo do Botafogo">
       <h1>Botafogo</h1>
     </div>
+    <div class="search">
+      <input type="text" placeholder="Pesquisar jogadores" class="search-input">
+      <button class="menu-btn search-btn">Buscar</button>
+    </div>
     <nav>
       <button class="menu-btn" id="btn-geral"><a href="geral.html">Geral</a></button>
       <button class="menu-btn" id="btn-masculino"><a href="masculino.html">Masculino</a></button>
       <button class="menu-btn" id="btn-feminino"><a href="feminino.html">Feminino</a></button>
+      <button class="menu-btn logout-btn" onclick="window.location.href = 'index.html';">
+        Sair
+        <i class="fas fa-sign-out-alt"></i>
     </nav>
   </header>
-  <div class="image-container">
-    <img src="images/roblox-fogao.jpeg" class="gallery-image">
-    <img src="images/Tiquinho.jpeg" class="gallery-image">
-  </div>
 </body>
 </html>
+  
