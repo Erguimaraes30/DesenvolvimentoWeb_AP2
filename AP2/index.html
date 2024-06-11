@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="images/escudo.png" sizes="16x16">
   <title>Atletas Botafogo</title>
-  <link rel="stylesheet" href="Style.css">
-  <script type='module' src="codigo.js"></script>
+  <link rel="stylesheet" href="./css/Style-index.css">
+  <script type='module' src="js/index.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Inline+One:ital@0;1&display=swap" rel="stylesheet">
@@ -27,20 +27,6 @@
       <p>Efetue login com a senha: BOTAFOGO</p>
     </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const senhaInput = document.querySelector('#input1');
-      const passwordForm = document.querySelector('#passwordForm');
-      
-      passwordForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        if (senhaInput.value.trim() === 'BOTAFOGO') {
-          window.location.href = 'home.html';
-        } else {
-          alert('Senha incorreta. Por favor, tente novamente.');
-        }
-      });
-    });
-  </script>
 </body>
 </html>
+  

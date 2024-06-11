@@ -259,3 +259,5 @@ function safe_add(x, y)
   var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
   return (msw << 16) | (lsw & 0xFFFF);
 }
+
+export{hex_sha256}
