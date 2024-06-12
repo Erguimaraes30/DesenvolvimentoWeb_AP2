@@ -35,13 +35,7 @@ header h1 {
     font-style: italic;
 }
 
-nav {
-    display: flex;
-    gap: 10px;
-}
-
 .menu-btn,
-.search-btn,
 .logout-btn {
     background-color: #fff;
     color: #000;
@@ -53,27 +47,9 @@ nav {
 }
 
 .menu-btn:hover,
-.search-btn:hover,
 .logout-btn:hover {
     background-color: gold;
     color: #fff;
-}
-
-.menu-btn a {
-    color: #000;
-    text-decoration: none;
-}
-
-.search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.search-input {
-    border: 2px solid rgb(0, 0, 0);
-    padding: 8px;
-    border-radius: 5px;
 }
 
 .logout-btn {
@@ -86,4 +62,3 @@ nav {
     align-items: center;
     margin-top: 20px;
 }
-
