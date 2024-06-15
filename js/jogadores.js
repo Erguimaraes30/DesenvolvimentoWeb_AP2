@@ -64,7 +64,7 @@ function cria_card(jogador) {
 
   const saibaMais = document.createElement("a")
   saibaMais.href = 'detalhes.html?id=' + jogador.id
-  saibaMais.textContent = 'saibaMais'
+  saibaMais.textContent = 'Saiba mais'
 
   const posicao_jogador = document.createElement("h3");
   posicao_jogador.textContent = jogador.posicao;
@@ -77,10 +77,14 @@ function cria_card(jogador) {
   container_card_jogador.appendChild(nome_jogador);
   container_card_jogador.appendChild(posicao_jogador);
   
-
+  
   container_card.appendChild(container_card_jogador);
+  
+  
 
-}
+    return container_card_jogador
+
+  }
 
 async function atualiza_jogadores() {
   jogadores = await fetchData('https://botafogo-atletas.mange.li/2024-1/all');
