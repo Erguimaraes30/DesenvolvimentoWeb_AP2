@@ -7,13 +7,13 @@ async function buscarAtletaPorId(id) {
       return await response.json();
     } catch (error) {
       console.error('Erro ao buscar atleta:', error.message);
-      throw error;
+      throw error; // Propaga o erro para que seja tratado no bloco catch de iniciar()
     }
   }
   
   function criarCard(atleta) {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
-    detalhesAtleta.innerHTML = '';
+    detalhesAtleta.innerHTML = ''; // Limpa o conteúdo anterior
   
     const divCard = document.createElement('div');
     divCard.classList.add('card');
@@ -57,7 +57,7 @@ async function buscarAtletaPorId(id) {
   
   function mostrarErro(mensagem) {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
-    detalhesAtleta.innerHTML = '';
+    detalhesAtleta.innerHTML = ''; // Limpa o conteúdo anterior
   
     const erro = document.createElement('p');
     erro.textContent = mensagem;
