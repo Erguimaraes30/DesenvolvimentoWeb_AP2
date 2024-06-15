@@ -14,7 +14,6 @@ search.addEventListener("input", () => {
 });
 
 
-
 const buttonsData = [
   { text: 'Masculino', url: 'https://botafogo-atletas.mange.li/2024-1/masculino' },
   { text: 'Feminino', url: 'https://botafogo-atletas.mange.li/2024-1/feminino' },
@@ -63,6 +62,10 @@ function cria_card(jogador) {
   image.src = jogador.imagem;
   image.className = "imagem";
 
+  const saibaMais = document.createElement("a")
+  saibaMais.href = 'detalhes.html?id=' + jogador.id
+  saibaMais.textContent = 'saibaMais'
+
   const posicao_jogador = document.createElement("h3");
   posicao_jogador.textContent = jogador.posicao;
 
@@ -70,10 +73,13 @@ function cria_card(jogador) {
   nome_jogador.textContent = jogador.nome;
 
   container_card_jogador.appendChild(image);
+  container_card_jogador.appendChild(saibaMais)
   container_card_jogador.appendChild(nome_jogador);
   container_card_jogador.appendChild(posicao_jogador);
+  
 
   container_card.appendChild(container_card_jogador);
+
 }
 
 async function atualiza_jogadores() {
