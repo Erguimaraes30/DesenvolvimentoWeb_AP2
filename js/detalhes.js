@@ -71,6 +71,7 @@ async function buscarAtletaPorId(id) {
   function iniciar() {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
   
+    // Verifica se o usuário está logado
     if (!sessionStorage.getItem('logado')) {
       const deslogado = document.createElement('p');
       deslogado.textContent = 'Acesso negado, faça login para acessar essa página';
@@ -78,6 +79,7 @@ async function buscarAtletaPorId(id) {
       return;
     }
   
+    // Obtém o ID do atleta da URL
     const urlParams = new URLSearchParams(window.location.search);
     const idAtleta = urlParams.get('id');
   
@@ -86,6 +88,7 @@ async function buscarAtletaPorId(id) {
       return;
     }
   
+    // Busca o atleta pelo ID e cria o card
     buscarAtletaPorId(idAtleta)
       .then(atleta => criarCard(atleta))
       .catch(() => mostrarErro('Erro ao tentar buscar atleta'));
