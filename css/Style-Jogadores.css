@@ -43,7 +43,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 300px; 
+  max-width: 300px;
 }
 
 .imagem {
@@ -85,6 +85,12 @@ header h1 {
   font-family: "Alumni Sans Inline One", sans-serif;
   font-weight: 400;
   font-style: italic;
+}
+
+.search-container {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .search-container button {
@@ -136,4 +142,86 @@ header h1 {
   background-color: gold;
   color: #000;
   border-color: gold;
+}
+
+
+@media screen and (max-width: 768px) {
+  .container {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .menu-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 0 3px;
+  }
+
+  #container_card {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .container_card_jogador {
+    max-width: 100%;
+  }
+
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header .logo img {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .search-container {
+    margin-left: 0;
+    margin-top: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .search-container input[type=text] {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .saiba-mais-btn {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    width: 80%;
+  }
+
+  .menu-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 0 5px;
+  }
+
+  #container_card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .container {
+    width: 1200px;
+  }
+
+  .menu-btn {
+    font-size: 18px;
+    padding: 12px 24px;
+  }
+
+  #container_card {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
 }
