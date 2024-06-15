@@ -13,5 +13,6 @@ document.getElementById('passwordForm').addEventListener('submit', (event) => {
         console.log("correto")
     }else{
         message.innerHTML = 'Senha incorreta';
+        sessionStorage.setItem('logado', '0');
     }
 });
