@@ -2,18 +2,22 @@ async function buscarAtletaPorId(id) {
     try {
       const response = await fetch(`https://botafogo-atletas.mange.li/2024-1/${id}`);
       if (!response.ok) {
-        throw new Error('Erro ao buscar atleta');
+        if (response.status === 404) {
+          throw new Error('Atleta não encontrado');
+        } else {
+          throw new Error('Erro ao buscar atleta');
+        }
       }
       return await response.json();
     } catch (error) {
       console.error('Erro ao buscar atleta:', error.message);
-      throw error; // Propaga o erro para que seja tratado no bloco catch de iniciar()
+      throw error;
     }
   }
   
   function criarCard(atleta) {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
-    detalhesAtleta.innerHTML = ''; // Limpa o conteúdo anterior
+    detalhesAtleta.innerHTML = '';
   
     const divCard = document.createElement('div');
     divCard.classList.add('card');
@@ -57,7 +61,7 @@ async function buscarAtletaPorId(id) {
   
   function mostrarErro(mensagem) {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
-    detalhesAtleta.innerHTML = ''; // Limpa o conteúdo anterior
+    detalhesAtleta.innerHTML = '';
   
     const erro = document.createElement('p');
     erro.textContent = mensagem;
@@ -71,7 +75,6 @@ async function buscarAtletaPorId(id) {
   function iniciar() {
     const detalhesAtleta = document.getElementById('detalhesAtleta');
   
-    // Verifica se o usuário está logado
     if (!sessionStorage.getItem('logado')) {
       const deslogado = document.createElement('p');
       deslogado.textContent = 'Acesso negado, faça login para acessar essa página';
@@ -79,7 +82,6 @@ async function buscarAtletaPorId(id) {
       return;
     }
   
-    // Obtém o ID do atleta da URL
     const urlParams = new URLSearchParams(window.location.search);
     const idAtleta = urlParams.get('id');
   
@@ -88,10 +90,15 @@ async function buscarAtletaPorId(id) {
       return;
     }
   
-    // Busca o atleta pelo ID e cria o card
     buscarAtletaPorId(idAtleta)
       .then(atleta => criarCard(atleta))
-      .catch(() => mostrarErro('Erro ao tentar buscar atleta'));
+      .catch(error => {
+        if (error.message === 'Atleta não encontrado') {
+          mostrarErro('Atleta não encontrado');
+        } else {
+          mostrarErro('Erro ao tentar buscar atleta');
+        }
+      });
   }
   
   document.addEventListener('DOMContentLoaded', iniciar);
